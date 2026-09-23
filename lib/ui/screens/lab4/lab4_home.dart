@@ -1,8 +1,9 @@
-// Lab 4 - Màn hình menu: mở Bài 1, 2, 3 và 4.
+// Lab 4 - Màn hình menu: mở Bài 1, 2, 3, 4 và 5.
 
 import 'package:flutter/material.dart';
 import 'package:untitled/ui/screens/home_page.dart';
 import 'package:untitled/ui/screens/lab4/app_structure_demo.dart';
+import 'package:untitled/ui/screens/lab4/common_ui_errors_demo.dart';
 import 'package:untitled/ui/screens/lab4/core_widgets_demo.dart';
 import 'package:untitled/ui/screens/lab4/input_controls_demo.dart';
 import 'package:untitled/ui/screens/lab4/layout_basics_demo.dart';
@@ -47,6 +48,13 @@ class Lab4Home extends StatelessWidget {
             subtitle: "Scaffold, AppBar, FAB, ThemeMode",
             icon: Icons.palette,
             onTap: () => _open(context, const AppStructureDemo()),
+          ),
+          _ExerciseTile(
+            number: 5,
+            title: "Debug & Fix UI Errors",
+            subtitle: "Expanded, SingleChildScrollView, setState, DatePicker",
+            icon: Icons.bug_report,
+            onTap: () => _open(context, const CommonUiErrorsDemo()),
           ),
           const Divider(height: 32),
           _ExerciseTile(

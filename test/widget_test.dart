@@ -8,6 +8,7 @@ import 'package:untitled/data/models/teacher.dart';
 import 'package:untitled/main.dart';
 import 'package:untitled/ui/screens/home_page.dart';
 import 'package:untitled/ui/screens/lab4/app_structure_demo.dart';
+import 'package:untitled/ui/screens/lab4/common_ui_errors_demo.dart';
 import 'package:untitled/ui/screens/lab4/core_widgets_demo.dart';
 import 'package:untitled/ui/screens/lab4/input_controls_demo.dart';
 import 'package:untitled/ui/screens/lab4/layout_basics_demo.dart';
@@ -298,6 +299,66 @@ void main() {
       await tester.pumpAndSettle();
       expect(themeModeNotifier.value, ThemeMode.light);
     });
+
+    testWidgets('Menu liệt kê Bài 5', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      expect(find.text('Bài 5 - Debug & Fix UI Errors'), findsOneWidget);
+    });
+
+    testWidgets('Menu mở được Bài 5 và Task 1 hiển thị chuẩn', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      await tester.tap(find.text('Bài 5 - Debug & Fix UI Errors'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(CommonUiErrorsDemo), findsOneWidget);
+      expect(find.text('Exercise 5 – Common UI Errors'), findsOneWidget);
+      expect(find.textContaining('Correct ListView inside Column using'), findsOneWidget);
+      expect(find.text('Movie A'), findsOneWidget);
+      expect(find.text('Movie B'), findsOneWidget);
+      expect(find.text('Movie C'), findsOneWidget);
+      expect(find.text('Movie D'), findsOneWidget);
+    });
+
+    testWidgets('Ex5 chuyển các Task qua BottomNavigationBar và hoạt động chính xác', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const MaterialApp(home: CommonUiErrorsDemo()));
+
+      // Task 1: Expanded
+      expect(find.text('Movie A'), findsOneWidget);
+
+      // Chuyển Task 2: ScrollView
+      await tester.tap(find.text('ScrollView'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Fix overflow in small screens'), findsOneWidget);
+
+      // Chuyển Task 3: setState
+      await tester.tap(find.text('setState'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Fix state update issue by adding setState()'), findsOneWidget);
+      expect(find.text('Giá trị hiển thị trên UI: 0'), findsWidgets);
+
+      // Bấm nút có setState
+      await tester.ensureVisible(find.text('Tăng (Dùng setState)'));
+      await tester.tap(find.text('Tăng (Dùng setState)'));
+      await tester.pump();
+      expect(find.text('Giá trị hiển thị trên UI: 1'), findsOneWidget);
+
+      // Chuyển Task 4: DatePicker
+      await tester.tap(find.text('DatePicker'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Fix DatePicker build context errors'), findsOneWidget);
+      expect(find.text('Chưa chọn ngày'), findsOneWidget);
+
+      // Bấm nút mở DatePicker an toàn
+      await tester.ensureVisible(find.text('Chọn ngày (Gọi an toàn từ onPressed)'));
+      await tester.tap(find.text('Chọn ngày (Gọi an toàn từ onPressed)'));
+      await tester.pumpAndSettle();
+      expect(find.byType(DatePickerDialog), findsOneWidget);
+    });
   });
 }
+
 
