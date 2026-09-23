@@ -7,8 +7,10 @@ import 'package:untitled/data/models/student.dart';
 import 'package:untitled/data/models/teacher.dart';
 import 'package:untitled/main.dart';
 import 'package:untitled/ui/screens/home_page.dart';
+import 'package:untitled/ui/screens/lab4/app_structure_demo.dart';
 import 'package:untitled/ui/screens/lab4/core_widgets_demo.dart';
 import 'package:untitled/ui/screens/lab4/input_controls_demo.dart';
+import 'package:untitled/ui/screens/lab4/layout_basics_demo.dart';
 import 'package:untitled/ui/widgets/product_widget.dart';
 
 void main() {
@@ -232,5 +234,70 @@ void main() {
       // DatePicker mở ra dưới dạng dialog.
       expect(find.byType(DatePickerDialog), findsOneWidget);
     });
+
+    testWidgets('Menu liệt kê Bài 3 và Bài 4', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      expect(find.text('Bài 3 - Layout Basics'), findsOneWidget);
+      expect(find.text('Bài 4 - App Structure & Theme'), findsOneWidget);
+    });
+
+    testWidgets('Menu mở được Bài 3', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      await tester.tap(find.text('Bài 3 - Layout Basics'));
+      await tester.pumpAndSettle();
+      expect(find.text('Exercise 3 – Layout Demo'), findsOneWidget);
+    });
+
+    testWidgets('Ex3 hiển thị Now Playing và danh sách phim', (tester) async {
+      await tester.pumpWidget(const MaterialApp(home: LayoutBasicsDemo()));
+
+      expect(find.text('Now Playing'), findsOneWidget);
+      expect(find.text('Avatar'), findsOneWidget);
+      expect(find.text('Inception'), findsOneWidget);
+      expect(find.text('Interstellar'), findsOneWidget);
+      expect(find.text('Joker'), findsOneWidget);
+      expect(find.byType(ListView), findsOneWidget);
+    });
+
+    testWidgets('Menu mở được Bài 4', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      await tester.tap(find.text('Bài 4 - App Structure & Theme'));
+      await tester.pumpAndSettle();
+      expect(find.text('Exercise 4 – App Structure & Theme'), findsOneWidget);
+    });
+
+    testWidgets('Ex4 hiển thị Scaffold, AppBar, FAB, Body text và toggle theme', (
+      tester,
+    ) async {
+      await tester.pumpWidget(const MyApp());
+
+      await tester.tap(find.text('Bài 4 - App Structure & Theme'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(AppStructureDemo), findsOneWidget);
+      expect(find.text('Exercise 4 – App Structure & Theme'), findsOneWidget);
+      expect(find.text('This is a simple screen with theme toggle.'), findsOneWidget);
+      expect(find.byType(FloatingActionButton), findsOneWidget);
+      expect(find.byType(Switch), findsOneWidget);
+
+      // Nhấn FAB kiểm tra tương tác
+      await tester.tap(find.byType(FloatingActionButton));
+      await tester.pump();
+      expect(find.textContaining('FloatingActionButton được bấm! Lần: 1'), findsOneWidget);
+
+      // Bật Dark Mode switch
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+      expect(themeModeNotifier.value, ThemeMode.dark);
+
+      // Tắt Dark Mode switch
+      await tester.tap(find.byType(Switch));
+      await tester.pumpAndSettle();
+      expect(themeModeNotifier.value, ThemeMode.light);
+    });
   });
 }
+
